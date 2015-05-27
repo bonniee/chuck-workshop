@@ -8,8 +8,6 @@
 
 10:30am-11:00am: me lecturing about ChucK
 
--- break! -- at 11:15-11:30am for me to show off some cool random stuff
-
 -- break! -- at 12:00pm for demos
 
 Sound synthesis is SUPER COOL!
@@ -19,3 +17,10 @@ Here's another kind of wave. Here's what that sounds like.
 
 
 2min per slide on sound synthesis.
+
+
+Hey everyone!
+
+Structure: I'm going to talk to you for about half an hour about computer music, and musical programming, and we're going to walk through some examples of programmatic sound synthesis together. After that, I've put together a workbook for you all, and we're going to spend an hour coding. If you already know basic sound synthesis, you should feel totally comfortable skipping to the workbook.
+
+Now, during the coding portion, I'm going to ask you all to write your own compositions and show them off, so as we're walking through this, keep some ideas churning in the back of your mind.
