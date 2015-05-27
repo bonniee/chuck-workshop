@@ -16,3 +16,6 @@ Sound synthesis is SUPER COOL!
 Here's a sine wave. Here's what pitch/frequency and volume/amplitude do.
 
 Here's another kind of wave. Here's what that sounds like.
+
+
+2min per slide on sound synthesis.
