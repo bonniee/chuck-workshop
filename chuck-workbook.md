@@ -1,14 +1,128 @@
 #Student Workbook: Introduction to Musical Programming using ChucK
 ## Joy of Coding Workshop by Bonnie Eisenman
 
-### Intro to ChucK
+## Table of Contents
+
+This page is available at [http://blog.bonnieeisenman.com/chuck-workshop/](http://blog.bonnieeisenman.com/chuck-workshop/). The github repo is [bonniee/chuck-workshop](https://github.com/bonniee/chuck-workshop).
+
+- [Introduction to Chuck: Syntax and Setup](#intro)
+  - What is ChucK?
+  - Hello World / Beep!
+  - Basic Programming Constructs
+- Amplitude
+- Pitch
+- Vibrato and FM Modulation
+- Working with Existing UGens and Instruments
+- Some Hardware Examples
+
+
+
+## <a name="intro"></a>ChucK Intro: Syntax and Setup
+
+### What is ChucK?
 ChucK is a musical programming language developed at Princeton. The homepage is here: [http://chuck.cs.princeton.edu](http://chuck.cs.princeton.edu)
 
 Before we begin:
 
-- Install ChucK
-- Decide if you want to use the IDE (MiniAudicle) or the command line
-- Turn your volume down to '0'
+- [Install ChucK](chuck.cs.princeton.edu/release/).
+- Decide if you want to use the IDE (MiniAudicle) or the command line.
+- Turn your volume down to '0'. Remember that "bugs" in musical programs can produce nasty noises!
+
+### Basic programming constructs
+
+ChucK is a musical programming language. It also includes most of the "normal" programming language constructs.
+
+This is mostly for reference. Skip ahead to [Hello, World](#helloworld) and refer back here if it's useful.
+
+#### Printing
+
+```
+<<< "Hi!"" >>>;
+```
+
+#### Variables
+
+```
+42 => int answer;
+525600::minute => dur measureAYear;
+6.28 => float tau;
+```
+[More on types.](http://chuck.cs.princeton.edu/doc/language/type.html)
+
+
+#### Arrays
+
+[Docs.](http://chuck.cs.princeton.edu/doc/language/array.html)
+
+```
+int foo[10];
+[55, 57, 59, 55] @=> int notes[];
+```
+
+ChucK also support associative and multidimensional arrays.
+
+#### Loops
+
+ChucK supports `for` and `while`.
+
+```
+for (0 => int i; i < 10; i++)
+{
+  <<< "loops are cool I guess" >>>;
+}
+```
+
+```
+while (true)
+{
+  <<< "This can be useful for looping audio." >>>;
+  1::second => now; // Wait 1 second
+}
+```
+
+#### Functions
+
+```
+fun void hey(string s )
+{
+  <<< "Hello, ", s, "!" >>>;
+}
+hey("everyboy");
+```
+
+#### Classes
+
+Yeah, ChucK has classes. [Here's my example](https://github.com/bonniee/chuck-workshop/blob/master/code/classExample.ck), and [here are the docs](http://chuck.cs.princeton.edu/doc/language/class.html).
+
+Example:
+
+```
+class Note
+{
+  // pre-constructor, run every time an instance is created
+  SinOsc o => Envelope e => dac;
+  250::ms => dur tempo;
+
+  fun void quarter(int m)
+  {
+    Std.mtof(m) => o.freq;
+    e.keyOn();
+    tempo => now;
+    e.keyOff();
+  }
+}
+
+Note n;
+n.quarter(55);
+n.quarter(57);
+n.quarter(59);
+n.quarter(55);
+100::ms => now;
+```
+
+#### Concurrency
+
+Concurrency in ChucK works via _sporking_. We'll cover this later.
 
 
 ### Hello, World (or, Beep!)

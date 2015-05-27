@@ -1,3 +1,5 @@
+// Demonstrates sporking.
+
 SinOsc beatOsc => Envelope e => dac;
 40 => beatOsc.freq;
 
@@ -16,9 +18,9 @@ fun void beatForever()
   while(true)
   {
     2 => float m;
-    beat(QUARTER * m, 40);
+    beat(QUARTER * m, 80);
     QUARTER * m => now;
-    beat(QUARTER * m, 50);
+    beat(QUARTER * m, 100);
     QUARTER * m => now;
   }
 }
