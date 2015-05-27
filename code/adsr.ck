@@ -1,8 +1,11 @@
 SinOsc s => ADSR e => dac;
+SawOsc s2;
+
+//s2 => e;
 
 // set gain
-.5 => s.gain;
-Std.mtof(74) => s.freq;
+.8 => s.gain;
+.1 => s2.gain;
 
 [66, 68, 70, 66] @=> int notes[];
 
@@ -11,6 +14,7 @@ fun void melody()
   for (0 => int i; i < notes.cap(); i++)
   {
     s.freq(Std.mtof(notes[i]));
+    s2.freq(Std.mtof(notes[i]));
     e.keyOn();
     500::ms => now;
     e.keyOff();
