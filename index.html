@@ -310,16 +310,49 @@ sup {
 
 <h2>Joy of Coding Workshop by Bonnie Eisenman</h2>
 
-<h3>Intro to ChucK</h3>
+<p>This page is available at <a href="http://blog.bonnieeisenman.com/chuck-workshop/">http://blog.bonnieeisenman.com/chuck-workshop/</a>. The github repo, which includes code samples, is <a href="https://github.com/bonniee/chuck-workshop">bonniee/chuck-workshop</a>.</p>
+
+<h2>How to Use</h2>
+
+<p>This workshop is really a "choose your own adventure"! Feel free to skip around and pick out the bits that sound interesting to you.</p>
+
+<p>The goal of this page is to equip you with a few tools and techniques that will help you explore musical programming with ChucK. The best way to have fun with ChucK is to start coding and experimenting, so our goal is to starting playing as soon as possible. I think you'll find that ChucK lends itself well to live coding and rapid iteration.</p>
+
+<p>Also, you should check out the code samples in <a href="https://github.com/bonniee/chuck-workshop">bonniee/chuck-workshop</a>.</p>
+
+<h2>Table of Contents</h2>
+
+<ul>
+<li><a href="#intro">Introduction to Chuck: Syntax and Setup</a>
+
+<ul>
+<li>What is ChucK?</li>
+<li>Hello World / Beep!</li>
+<li>Basic Programming Constructs</li>
+</ul>
+</li>
+<li><a href="#volume">Volume</a></li>
+<li><a href="#pitch">Pitch and Frequency</a></li>
+<li>Vibrato and FM Modulation</li>
+<li>Working with Existing UGens and Instruments</li>
+<li>Some Hardware Examples</li>
+</ul>
+
+
+<h2><a name="intro"></a>ChucK Intro: Syntax and Setup</h2>
+
+<h3>What is ChucK?</h3>
 
 <p>ChucK is a musical programming language developed at Princeton. The homepage is here: <a href="http://chuck.cs.princeton.edu">http://chuck.cs.princeton.edu</a></p>
+
+<p>The goal of ChucK is sound/music creation and performance. While most programming languages have built-in support for things like numbers and strings, ChucK also focuses on the manipulation of sound and time. It lends itself well to live coding and experimentation. Hopefully you'll find it fun!</p>
 
 <p>Before we begin:</p>
 
 <ul>
-<li>Install ChucK</li>
-<li>Decide if you want to use the IDE (MiniAudicle) or the command line</li>
-<li>Turn your volume down to '0'</li>
+<li><a href="chuck.cs.princeton.edu/release/">Install ChucK</a>.</li>
+<li>Decide if you want to use the IDE (MiniAudicle) or the command line.</li>
+<li>Turn your volume down to '0'. Remember that "bugs" in musical programs can produce nasty noises!</li>
 </ul>
 
 
@@ -337,12 +370,12 @@ SinOsc osc =&gt; dac;
   Your browser does not support the audio tag.
 </audio></p>
 
-<p>The first line creates a <em>sine wave</em> and <em>chucks</em> it to the <em>dac</em>. Whoa, new terminology!</p>
+<p>The first line creates a <em>sine wave</em> and <em>chucks</em> it to the <em>dac</em>. Whoa, that's a lot of new terminology!</p>
 
 <ul>
 <li>Instead of the assignment operator, <code>=</code>, which you might see in other languages, ChucK uses the "chuck" operator, or <code>=&gt;</code>.</li>
-<li><em>dac</em> is shorthand for your audio output (e.g. speakers or headphones). Similarly, <em>adc</em> refers to your microphone. Docs: <a href="http://chuck.cs.princeton.edu/doc/program/ugen_full.html#dac">http://chuck.cs.princeton.edu/doc/program/ugen_full.html#dac</a></li>
-<li>A SinOsc is a <em>unit generator</em> that produces sine waves. Docs: <a href="http://chuck.cs.princeton.edu/doc/program/ugen_full.html#sinosc">http://chuck.cs.princeton.edu/doc/program/ugen_full.html#sinosc</a></li>
+<li><em>dac</em> is shorthand for your audio output (e.g. speakers or headphones). Similarly, <em>adc</em> refers to your microphone. <a href="http://chuck.cs.princeton.edu/doc/program/ugen_full.html#dac">Docs here.</a></li>
+<li>A SinOsc is a <em>unit generator</em> that produces sine waves. In ChucK, Unit Generators produce a steady stream of <em>samples</em>; basically, they're things that make noise. <a href="http://chuck.cs.princeton.edu/doc/program/ugen_full.html#sinosc">SinOsc docs here.</a></li>
 </ul>
 
 
@@ -352,19 +385,184 @@ SinOsc osc =&gt; dac;
 
 <p>We perceive a sine wave as a tone, so sending a sine wave to the dac creates an audible noise.</p>
 
-<p>The first line alone won't do anything, however, because the program will immediately terminate. The second line causes the program to wait for one second. <code>1::second</code> creates a <em>duration</em> object; chucking it into <em>now</em> causes the program to wait.</p>
+<p>The first line alone won't create any sound, however, because the program will immediately terminate. The second line causes the program to wait for one second. <code>1::second</code> creates a <em>duration</em> object; chucking it into <em>now</em> causes the program to wait.</p>
 
-<h3>Volume</h3>
+<h3>Basic programming constructs</h3>
+
+<p>ChucK is a musical programming language, but it also includes most of the "normal" programming language constructs.</p>
+
+<p>This section is mostly for reference -- skim it, but don't worry about understanding everything!</p>
+
+<h4>Printing</h4>
+
+<pre><code>&lt;&lt;&lt; "Hi! This is good for debugging." &gt;&gt;&gt;;
+</code></pre>
+
+<h4>Variables</h4>
+
+<p>Basic types that you may find useful include <code>float</code>, <code>int</code>, and <code>dur</code> (duration).</p>
+
+<pre><code>42 =&gt; int answer;
+525600::minute =&gt; dur measureAYear;
+6.28 =&gt; float tau;
+</code></pre>
+
+<p><a href="http://chuck.cs.princeton.edu/doc/language/type.html">More on types.</a></p>
+
+<h4>Arrays</h4>
+
+<p><a href="http://chuck.cs.princeton.edu/doc/language/array.html">Docs.</a></p>
+
+<p>Arrays are useful for storing things like note values, rhythms, and so on.</p>
+
+<pre><code>int foo[10];
+[55, 57, 59, 55] @=&gt; int notes[];
+</code></pre>
+
+<p>ChucK also support associative and multidimensional arrays.</p>
+
+<h4>Loops</h4>
+
+<p>ChucK supports <code>for</code> and <code>while</code>.</p>
+
+<pre><code>for (0 =&gt; int i; i &lt; 10; i++)
+{
+  &lt;&lt;&lt; "loops are cool I guess" &gt;&gt;&gt;;
+}
+</code></pre>
+
+<pre><code>while (true)
+{
+  &lt;&lt;&lt; "This can be useful for looping audio indefinitely." &gt;&gt;&gt;;
+  1::second =&gt; now; // Wait 1 second
+}
+</code></pre>
+
+<h4>Functions</h4>
+
+<pre><code>fun void hey(string s )
+{
+  &lt;&lt;&lt; "Hello, ", s, "!" &gt;&gt;&gt;;
+}
+hey("everyboy");
+</code></pre>
+
+<h4>Classes</h4>
+
+<p>ChucK has classes. <a href="http://chuck.cs.princeton.edu/doc/language/class.html">Here are the docs</a>. Once you start working with more complicated synthesis, you'll likely find classes useful.</p>
+
+<p>Example (don't worry too much about the code for now):</p>
+
+<pre><code>// classExample.ck
+class Note
+{
+  // pre-constructor, run every time an instance is created
+  SinOsc o =&gt; Envelope e =&gt; dac;
+  250::ms =&gt; dur tempo;
+
+  fun void quarter(int m)
+  {
+    Std.mtof(m) =&gt; o.freq;
+    e.keyOn();
+    tempo =&gt; now;
+    e.keyOff();
+  }
+}
+
+Note n;
+n.quarter(55);
+n.quarter(57);
+n.quarter(59);
+n.quarter(55);
+100::ms =&gt; now;
+</code></pre>
+
+<p><audio controls>
+  <source src="assets/sound/classExample.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio></p>
+
+<h4>Helpful functions</h4>
+
+<p>The <code>Std</code> <a href="chuck.cs.princeton.edu/doc/program/stdlib.html">library</a> contains some helpful functions. Also, <code>Math</code>!</p>
+
+<ul>
+<li><code>Std.mtof(int midi)</code> takes a MIDI value (int) and converts it to a frequency in Hz.</li>
+<li><code>Math.random2(int min, int max)</code> is good for adding some variation to your pieces.</li>
+</ul>
+
+
+<h2><a name="volume"></a>Manipulating Volume</h2>
 
 <p>The perceived <strong>volume</strong> of a sound is determined by the <strong>amplitude</strong> of the wave.</p>
 
-<h3>Pitch and Volume</h3>
+<p>We can change amplitude using the <code>gain</code> method of any sound-generator (called a <code>UGen</code> in Chuck). Like so:</p>
 
-<p>The perceived <strong>loudness</strong> of a tone is determined by the <strong>amplitude</strong> of the wave, and the perceived <strong>pitch</strong> is determined by the frequency of the wave.</p>
+<pre><code>SinOsc s =&gt; dac;
+s.gain(1); // Full volume
+1::second =&gt; now;
+s.gain(0.5); // Half volume
+1::second =&gt; now;
+</code></pre>
 
-<p>Let's make two beeps now, and try varying their pitches and volume.</p>
+<p><audio controls>
+  <source src="assets/sound/volume.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio></p>
 
-<pre><code># hello2.ck
+<p>We can also change gain more rapidly:</p>
+
+<pre><code>// changeAmplitude.ck
+SinOsc s =&gt; dac;
+s.freq(Std.mtof(70));
+s.gain(0);
+
+for (0=&gt; int i; i &lt; 100; i++)
+{
+  s.gain(i * .01);
+  10::ms =&gt; now;
+}
+</code></pre>
+
+<p><audio controls>
+  <source src="assets/sound/changeAmplitude.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio></p>
+
+<p>We can also use the <code>Gain</code> UGen to manipulate volume more easily. When two UGens are chucked into the same output, their effects are cumulative. Using a Gain can let us manipulate their volume jointly.</p>
+
+<pre><code>// gain.ck  
+SinOsc s1 =&gt; Gain g =&gt; dac;
+SinOsc s2 =&gt; g;
+s1.freq(Std.mtof(70));
+s1.gain(0.8);
+s2.freq(Std.mtof(72));
+s2.gain(0.1);
+
+g.gain(1);
+for (200 =&gt; int i; i &gt;= 0; i--)
+{
+  g.gain(i / 100.0);
+  10::ms =&gt; now;
+}
+</code></pre>
+
+<p><audio controls>
+  <source src="assets/sound/gain.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio></p>
+
+<blockquote><h2>Exercise: Volume and Rhythm</h2>
+
+<p>What kind of rhythms can you generate just by varing volume? Check out <code>rhythm.ck</code> for an example, and try creating your own variations.</p></blockquote>
+
+<h2><a name="pitch"></a>Pitch and Frequency</h2>
+
+<p>The perceived <strong>pitch</strong> is determined by the frequency of the wave. <strong>Pitch</strong> is a musical term -- when we talk about pitch we sometimes refer to standard notes (say, a middle C). <strong>Frequency</strong> is a physical property, and is measured in <strong>Herz</strong> or <strong>Hz</strong>: the number of cycles a wave makes per second.</p>
+
+<p>Extening <code>hello.ck</code> to make two differently-pitched beeps is easy:</p>
+
+<pre><code>// hello2.ck
 SinOsc osc =&gt; Gain g =&gt; dac;
 
 .5 =&gt; g.gain;
@@ -381,19 +579,68 @@ SinOsc osc =&gt; Gain g =&gt; dac;
   Your browser does not support the audio tag.
 </audio></p>
 
-<p>New things of note:</p>
+<p>We can also use <code>Std.mtof</code> to set frequency using MIDI values, which are usually easier to understand intuitively than raw Herz values. MIDI values map to notes, so for instance, a middle C has a MIDI value of 60.</p>
 
-<ul>
-<li>ChucK syntax is a little backwards when it comes to assignment, compared with other programming languages. It's <code>440 =&gt; osc.freq</code>, not <code>osc.freq = 440</code>.</li>
-<li>You can chain <code>=&gt;</code> operators together! This syntax is inspired by the physical legacy of electronic music, when you might be literally chaining together multiple objects using wires.</li>
-<li>A <code>Gain</code> is a unit generator that controls volume. Docs: <a href="http://chuck.cs.princeton.edu/doc/program/ugen_full.html#gain">http://chuck.cs.princeton.edu/doc/program/ugen_full.html#gain</a></li>
-<li>We're now using milliseconds, or <code>ms</code>, instead of seconds. You can also use <code>minute</code>, <code>hour</code>, <code>day</code>, or even <code>week</code>.</li>
-</ul>
+<pre><code>// mtof.ck
+SinOsc osc =&gt; dac;
+for (40 =&gt; int i; i &lt; 80; i++)
+{
+  osc.freq(Std.mtof(i));
+  500::ms =&gt; now;
+}
+</code></pre>
 
+<p><audio controls>
+  <source src="assets/sound/mtof.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio></p>
 
-<p>Changing the frequency of a wave can dramatically impact how we perceive it. If you lower the pitch, you will hear a <strong>beat</strong> instead of a <strong>tone</strong>. You may need headphones or good-quality speakers, not normal laptop speakers, to hear this.</p>
+<p>Frequency doesn't have to be fixed! Rapidly scaling the frequency can produce neat effects:</p>
 
-<pre><code># beat.ck
+<pre><code>// slide.ck
+SinOsc osc =&gt; dac;
+
+fun void slide(int start, int end, int len)
+{
+  start - end =&gt; int gap;
+  gap / 200.0 =&gt; float step;
+  len / 200.0 =&gt; float wait;
+
+  osc.gain(1);
+  osc.freq(start);
+  for (0 =&gt; int i; i &lt; 200; i++)
+  {
+    osc.freq(osc.freq() - step);
+    wait::ms =&gt; now;
+  }
+  osc.gain(0);
+}
+
+while (true)
+{
+  slide(200, 50, 150);
+  slide(200, 50, 500);
+  slide(50, 200, 500);
+  slide(100, 300, 500);
+  slide(300, 50, 150);
+}
+</code></pre>
+
+<p>// TODO</p>
+
+<blockquote><h2>Exercise: Manipulating Frequency</h2>
+
+<p>What kinds of sound effects can you create solely by manipulating frequency? Note the difference between the "slide up" and "slide down" sounds in <code>slide.ck</code>.</p>
+
+<h2>Exercise: Playing a Basic Melody</h2>
+
+<p>Now that you know how to control both pitch and volume, try playing a basic melody. Mary Had a Little Lamb, perhaps?</p></blockquote>
+
+<h3>Below the Threshold: Beats</h3>
+
+<p>We hear pitches within a certain frequency range as tones, but as the frequency drops, we'll hear a "beat" instead. Try listening to this with your headphones on.</p>
+
+<pre><code>// beat.ck
 SinOsc osc =&gt; dac;
 40 =&gt; osc.freq;
 2::second =&gt; now;
@@ -404,16 +651,116 @@ SinOsc osc =&gt; dac;
   Your browser does not support the audio tag.
 </audio></p>
 
-<p>What's the difference between</p>
+<p>You can actually hear where this threshold happens, too:</p>
 
-<h2>planning</h2>
+<pre><code>// pitchdrop.ck
+SinOsc osc =&gt; Envelope e =&gt; dac;
+for (180 =&gt; int i; i &gt; 40; i--)
+{
+  osc.freq(i);
+  e.keyOn();
+  200::ms =&gt; now;
+  e.keyOff();
+  100::ms =&gt; now;
+}
+2::second =&gt; now;
+</code></pre>
+
+<p>// TODO</p>
+
+<blockquote><h2>Excercise: Beat It</h2>
+
+<p>Try adjusting the frequency you used in your earlier rhythm sketch. What does it sound like?</p></blockquote>
+
+<h2>Types of waves</h2>
+
+<p>Sine, square, triangle, and square waves form the basis of simple sound generation. We've been using mostly sine waves in the examples thus far. Try swapping out sine waves for other kinds and experiment to determine how it changes the perceived sound.</p>
+
+<h2>Programming time!</h2>
+
+<p>Hey! You've covered enough at this point that you should be able to try your hand at <strong>composing</strong> (or programming, if you prefer...) some music.</p>
+
+<p>Here are some ideas:</p>
 
 <ul>
-<li>demonstrate beats</li>
-<li>demonstrate changing the volume</li>
-<li>do a beat</li>
-<li>overlay a melody to demonstrate sporking</li>
+<li>Try to synthesize an organ-like noise.</li>
+<li>Play Mary Had a Little Lamb.</li>
+<li>Make some weird computer-y noises.</li>
+<li>I dunno, have fun!</li>
 </ul>
 
+
+<p>It might be useful to use the following constructs:</p>
+
+<h3>Arrays of pitch and duration</h3>
+
+<p>Organizing your composition using arrays can be helpful. You can see an example of this here:</p>
+
+<pre><code>// Excerpt from motif3.ck
+[ [55,Q/2], [55,Q/2], [55,Q/2], [52,Q*2],
+  [0,Q/2], [53,Q/2], [53, Q/2], [53,Q/2],
+  [50,Q*2] ] @=&gt; int notes[][];
+
+for (0 =&gt; int i; i &lt; notes.cap(); i++)
+{
+  play(notes[i][0], notes[i][1]::ms);
+}
+</code></pre>
+
+<h3>Classes</h3>
+
+<p>If there's a particular effect you'll want to use often, create a class for it. See the file <code>classExample.ck</code>.</p>
+
+<h2>Combining Waves: LFOs and Vibrato</h2>
+
+<pre><code>// lfo.ck
+SinOsc s =&gt; dac;
+SinOsc lfo =&gt; blackhole;
+
+440 =&gt; s.freq;
+5 =&gt; lfo.freq;
+while (true)
+{
+  20::ms =&gt; now;
+  (lfo.last() * 10) + 440 =&gt; s.freq;
+}
+</code></pre>
+
+<p>A "low frequency oscilator" is just what it sounds like. By modulating the frequency of the main SinOsc, we can create a kind of vibrato effect. What happens when you tweak some of these parameters?</p>
+
+<h2>Combining Waves: Adding Overtones</h2>
+
+<p><code>motif2.ck</code> is a good example of combining multiple waves to create an effect.</p>
+
+<h2>Concurrency with spork</h2>
+
+<p>ChucK has a concept of <strong>shreds</strong>, which are similar to threads in other languages. You can <strong>spork</strong> a new shred (yeah, it's like forking a thread, isn't the naming great?).</p>
+
+<p>You can read up about sporking in the <a href="http://chuck.cs.princeton.edu/doc/language/spork.html">docs</a>.</p>
+
+<p><code>sporking.ck</code> is a more complicated example, which shows how multiple kinds of sounds can be combined in a piece via <code>spork</code>.</p>
+
+<h2>Envelopes</h2>
+
+<p>Envelopes are awesome because they allow you to transition gradually between states. That clicking noise at the begining and end of each note in the <code>hello.ck</code> example? It's because we weren't using an envelope.</p>
+
+<p><code>envelope.ck</code> is a very simple example.</p>
+
+<pre><code>// envelope.ck
+SinOsc s =&gt; Envelope e =&gt; dac;
+s.freq(550);
+e.keyOn();
+2::second =&gt; now;
+e.keyOff();
+200::ms =&gt; now;
+</code></pre>
+
+<h2>ADSR and Characteristic Sounds</h2>
+
+<p>An <strong>ADSR</strong> is a special kind of envelope, one that features four paramterers:  attack, decay, sustain, and release. Combined with difference types of waves, an ADSR is a good way to get a particular kind of sound effect. <code>adsr.ck</code> is a good example.</p>
+
+<blockquote><h2>Exercise: Sound Synthesis</h2>
+
+<p>Using an ADSR, what kinds of effects can you create?</p></blockquote>
 </body>
 </html>

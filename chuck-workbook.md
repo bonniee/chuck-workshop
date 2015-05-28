@@ -9,19 +9,20 @@ This workshop is really a "choose your own adventure"! Feel free to skip around 
 
 The goal of this page is to equip you with a few tools and techniques that will help you explore musical programming with ChucK. The best way to have fun with ChucK is to start coding and experimenting, so our goal is to starting playing as soon as possible. I think you'll find that ChucK lends itself well to live coding and rapid iteration.
 
+Also, you should check out the code samples in [bonniee/chuck-workshop](https://github.com/bonniee/chuck-workshop).
+
 ## Table of Contents
 
 
 - [Introduction to Chuck: Syntax and Setup](#intro)
-  - What is ChucK?
-  - Hello World / Beep!
-  - Basic Programming Constructs
-- Amplitude
-- Pitch
-- Vibrato and FM Modulation
-- Working with Existing UGens and Instruments
-- Some Hardware Examples
-
+- [Volume](#volume)
+- [Pitch and Frequency](#pitch)
+- [Types of Waves](#waves)
+- [Vibrato and FM Modulation](#lfo)
+- [Overtones](#overtones)
+- [Concurrency with Spork](#spork)
+- [Envelopes](#env)
+- [ADSRs](#adsr)
 
 
 ## <a name="intro"></a>ChucK Intro: Syntax and Setup
@@ -182,7 +183,7 @@ The `Std` [library](chuck.cs.princeton.edu/doc/program/stdlib.html) contains som
 - `Math.random2(int min, int max)` is good for adding some variation to your pieces.
 
 
-## Manipulating Volume
+## <a name="volume"></a>Manipulating Volume
 
 The perceived __volume__ of a sound is determined by the __amplitude__ of the wave.
 
@@ -251,7 +252,7 @@ for (200 => int i; i >= 0; i--)
 > ## Exercise: Volume and Rhythm
 > What kind of rhythms can you generate just by varing volume? Check out `rhythm.ck` for an example, and try creating your own variations.
 
-## Pitch and Frequency
+## <a name="pitch"></a>Pitch and Frequency
 
 The perceived __pitch__ is determined by the frequency of the wave. __Pitch__ is a musical term -- when we talk about pitch we sometimes refer to standard notes (say, a middle C). __Frequency__ is a physical property, and is measured in __Herz__ or __Hz__: the number of cycles a wave makes per second.
 
@@ -326,8 +327,6 @@ while (true)
 }
 ```
 
-// TODO
-
 > ## Exercise: Manipulating Frequency
 > What kinds of sound effects can you create solely by manipulating frequency? Note the difference between the "slide up" and "slide down" sounds in `slide.ck`.
 
@@ -369,8 +368,6 @@ for (180 => int i; i > 40; i--)
 2::second => now;
 ```
 
-// TODO
-
 
 > ## Excercise: Beat It
 > Try adjusting the frequency you used in your earlier rhythm sketch. What does it sound like?
@@ -378,7 +375,7 @@ for (180 => int i; i > 40; i--)
 
 
 
-## Types of waves
+## <a name="waves"></a>Types of waves
 
 Sine, square, triangle, and square waves form the basis of simple sound generation. We've been using mostly sine waves in the examples thus far. Try swapping out sine waves for other kinds and experiment to determine how it changes the perceived sound.
 
@@ -416,7 +413,7 @@ for (0 => int i; i < notes.cap(); i++)
 If there's a particular effect you'll want to use often, create a class for it. See the file `classExample.ck`.
 
 
-## Combining Waves: LFOs
+## <a name="lfo"></a>Combining Waves: LFOs and Vibrato
 
 ```
 // lfo.ck
@@ -432,51 +429,40 @@ while (true)
 }
 ```
 
-// tODO add sound file
+A "low frequency oscilator" is just what it sounds like. By modulating the frequency of the main SinOsc, we can create a kind of vibrato effect. What happens when you tweak some of these parameters?
 
-## Combining Waves: Adding Overtones
+## <a name="overtones"></a>Combining Waves: Adding Overtones
 
-## Concurrency with spork
+`motif2.ck` is a good example of combining multiple waves to create an effect.
+
+## <a name="spork"></a>Concurrency with spork
 
 ChucK has a concept of __shreds__, which are similar to threads in other languages. You can __spork__ a new shred (yeah, it's like forking a thread, isn't the naming great?).
 
-Here's a very basic example:
+You can read up about sporking in the [docs](http://chuck.cs.princeton.edu/doc/language/spork.html).
 
-```
-// TODO
-```
-
-`sporking.ck` is a more complicated example:
-
-```
-// TODO
-```
+`sporking.ck` is a more complicated example, which shows how multiple kinds of sounds can be combined in a piece via `spork`.
 
 
-## Envelopes
+## <a name="env"></a>Envelopes
 
 Envelopes are awesome because they allow you to transition gradually between states. That clicking noise at the begining and end of each note in the `hello.ck` example? It's because we weren't using an envelope.
 
-Without an envelope, a sine wave might look like this:
-
-// TODO: image
-
-With an envelope, we get a smooth transition between "off" and "on".
-
-// TODO: image
+`envelope.ck` is a very simple example.
 
 ```
-// TODO
+// envelope.ck
+SinOsc s => Envelope e => dac;
+s.freq(550);
+e.keyOn();
+2::second => now;
+e.keyOff();
+200::ms => now;
 ```
 
+## <a name="adsr"></a>ADSR and Characteristic Sounds
 
-## ADSR and Characteristic Sounds
+An __ADSR__ is a special kind of envelope, one that features four paramterers:  attack, decay, sustain, and release. Combined with difference types of waves, an ADSR is a good way to get a particular kind of sound effect. `adsr.ck` is a good example.
 
-
-
-
-
-
-Changing the frequency of a wave can dramatically impact how we perceive it. If you lower the pitch, you will hear a __beat__ instead of a __tone__. You may need headphones or good-quality speakers, not normal laptop speakers, to hear this.
-
-
+> ## Exercise: Sound Synthesis
+> Using an ADSR, what kinds of effects can you create?
