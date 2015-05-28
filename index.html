@@ -323,19 +323,15 @@ sup {
 <h2>Table of Contents</h2>
 
 <ul>
-<li><a href="#intro">Introduction to Chuck: Syntax and Setup</a>
-
-<ul>
-<li>What is ChucK?</li>
-<li>Hello World / Beep!</li>
-<li>Basic Programming Constructs</li>
-</ul>
-</li>
+<li><a href="#intro">Introduction to Chuck: Syntax and Setup</a></li>
 <li><a href="#volume">Volume</a></li>
 <li><a href="#pitch">Pitch and Frequency</a></li>
-<li>Vibrato and FM Modulation</li>
-<li>Working with Existing UGens and Instruments</li>
-<li>Some Hardware Examples</li>
+<li><a href="#waves">Types of Waves</a></li>
+<li><a href="#lfo">Vibrato and FM Modulation</a></li>
+<li><a href="#overtones">Overtones</a></li>
+<li><a href="#spork">Concurrency with Spork</a></li>
+<li><a href="#env">Envelopes</a></li>
+<li><a href="#adsr">ADSRs</a></li>
 </ul>
 
 
@@ -626,8 +622,6 @@ while (true)
 }
 </code></pre>
 
-<p>// TODO</p>
-
 <blockquote><h2>Exercise: Manipulating Frequency</h2>
 
 <p>What kinds of sound effects can you create solely by manipulating frequency? Note the difference between the "slide up" and "slide down" sounds in <code>slide.ck</code>.</p>
@@ -666,13 +660,11 @@ for (180 =&gt; int i; i &gt; 40; i--)
 2::second =&gt; now;
 </code></pre>
 
-<p>// TODO</p>
-
 <blockquote><h2>Excercise: Beat It</h2>
 
 <p>Try adjusting the frequency you used in your earlier rhythm sketch. What does it sound like?</p></blockquote>
 
-<h2>Types of waves</h2>
+<h2><a name="waves"></a>Types of waves</h2>
 
 <p>Sine, square, triangle, and square waves form the basis of simple sound generation. We've been using mostly sine waves in the examples thus far. Try swapping out sine waves for other kinds and experiment to determine how it changes the perceived sound.</p>
 
@@ -711,7 +703,7 @@ for (0 =&gt; int i; i &lt; notes.cap(); i++)
 
 <p>If there's a particular effect you'll want to use often, create a class for it. See the file <code>classExample.ck</code>.</p>
 
-<h2>Combining Waves: LFOs and Vibrato</h2>
+<h2><a name="lfo"></a>Combining Waves: LFOs and Vibrato</h2>
 
 <pre><code>// lfo.ck
 SinOsc s =&gt; dac;
@@ -728,11 +720,11 @@ while (true)
 
 <p>A "low frequency oscilator" is just what it sounds like. By modulating the frequency of the main SinOsc, we can create a kind of vibrato effect. What happens when you tweak some of these parameters?</p>
 
-<h2>Combining Waves: Adding Overtones</h2>
+<h2><a name="overtones"></a>Combining Waves: Adding Overtones</h2>
 
 <p><code>motif2.ck</code> is a good example of combining multiple waves to create an effect.</p>
 
-<h2>Concurrency with spork</h2>
+<h2><a name="spork"></a>Concurrency with spork</h2>
 
 <p>ChucK has a concept of <strong>shreds</strong>, which are similar to threads in other languages. You can <strong>spork</strong> a new shred (yeah, it's like forking a thread, isn't the naming great?).</p>
 
@@ -740,7 +732,7 @@ while (true)
 
 <p><code>sporking.ck</code> is a more complicated example, which shows how multiple kinds of sounds can be combined in a piece via <code>spork</code>.</p>
 
-<h2>Envelopes</h2>
+<h2><a name="env"></a>Envelopes</h2>
 
 <p>Envelopes are awesome because they allow you to transition gradually between states. That clicking noise at the begining and end of each note in the <code>hello.ck</code> example? It's because we weren't using an envelope.</p>
 
@@ -755,7 +747,7 @@ e.keyOff();
 200::ms =&gt; now;
 </code></pre>
 
-<h2>ADSR and Characteristic Sounds</h2>
+<h2><a name="adsr"></a>ADSR and Characteristic Sounds</h2>
 
 <p>An <strong>ADSR</strong> is a special kind of envelope, one that features four paramterers:  attack, decay, sustain, and release. Combined with difference types of waves, an ADSR is a good way to get a particular kind of sound effect. <code>adsr.ck</code> is a good example.</p>
 
