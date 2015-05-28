@@ -215,7 +215,7 @@ for (0=> int i; i < 100; i++)
   Your browser does not support the audio tag.
 </audio>
 
-We can also use the `Gain` UGen to manipulate volume more easily. When two UGens are chucked into the same output, we add their effects. Using a Gain can let us manipulate their volume jointly.
+We can also use the `Gain` UGen to manipulate volume more easily. When two UGens are chucked into the same output, their effects are cumulative. Using a Gain can let us manipulate their volume jointly.
 
 ```
 // gain.ck	
@@ -240,11 +240,24 @@ for (200 => int i; i >= 0; i--)
   Your browser does not support the audio tag.
 </audio>
 
+> ## Exercise: Volume and Rhythm
+> What kind of rhythms can you generate just by varing volume?
+
 ## Pitch and Frequency
 
-The perceived __loudness__ of a tone is determined by the __amplitude__ of the wave, and the perceived __pitch__ is determined by the frequency of the wave.
+The perceived __pitch__ is determined by the frequency of the wave. __Pitch__ is a musical term -- when we talk about pitch we sometimes refer to standard notes (say, a middle C). __Frequency__ is a physical property, and is measured in __Herz__ or __Hz__: the number of cycles a wave makes per second.
 
-Let's make two beeps now, and try varying their pitches and volume.
+Extening `hello.ck` to make two differently-pitched beeps is easy:
+
+```
+// TODO
+```
+
+We can also use `Std.mtof` to set frequency using MIDI values, which are usually easier to understand intuitively than raw Herz values. MIDI values map to notes, so for instance, a middle C has a MIDI value of //TODO.
+
+```
+// TODO
+```
 
 
 ## Types of waves
@@ -261,6 +274,21 @@ Here are some ideas:
 - Play Mary Had a Little Lamb.
 - Make some weird computer-y noises.
 - I dunno, have fun!
+
+It might be useful to use the following constructs:
+
+### Arrays of pitch and duration
+
+You can see an example of this here:
+
+```
+// TODO
+```
+
+### Classes
+
+If there's a particular effect you'll want to use often, create a class for it. See the file `classExample.ck`.
+
 
 ## Combining Waves: LFOs
 
@@ -282,8 +310,38 @@ while (true)
 
 ## Combining Waves: Adding Overtones
 
+## Concurrency with spork
+
+ChucK has a concept of __shreds__, which are similar to threads in other languages. You can __spork__ a new shred (yeah, it's like forking a thread, isn't the naming great?).
+
+Here's a very basic example:
+
+```
+// TODO
+```
+
+`sporking.ck` is a more complicated example:
+
+```
+// TODO
+```
+
 
 ## Envelopes
+
+Envelopes are awesome because they allow you to transition gradually between states. That clicking noise at the begining and end of each note in the `hello.ck` example? It's because we weren't using an envelope.
+
+Without an envelope, a sine wave might look like this:
+
+// TODO: image
+
+With an envelope, we get a smooth transition between "off" and "on".
+
+// TODO: image
+
+```
+// TODO
+```
 
 ## The Noise Ugen
 
