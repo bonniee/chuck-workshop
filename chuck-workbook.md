@@ -1,9 +1,16 @@
 #Student Workbook: Introduction to Musical Programming using ChucK
 ## Joy of Coding Workshop by Bonnie Eisenman
 
+This page is available at [http://blog.bonnieeisenman.com/chuck-workshop/](http://blog.bonnieeisenman.com/chuck-workshop/). The github repo, which includes code samples, is [bonniee/chuck-workshop](https://github.com/bonniee/chuck-workshop).
+
+## How to Use
+
+This workshop is really a "choose your own adventure"! Feel free to skip around and pick out the bits that sound interesting to you.
+
+The goal of this page is to equip you with a few tools and techniques that will help you explore musical programming with ChucK. The best way to have fun with ChucK is to start coding and experimenting, so our goal is to starting playing as soon as possible. I think you'll find that ChucK lends itself well to live coding and rapid iteration.
+
 ## Table of Contents
 
-This page is available at [http://blog.bonnieeisenman.com/chuck-workshop/](http://blog.bonnieeisenman.com/chuck-workshop/). The github repo is [bonniee/chuck-workshop](https://github.com/bonniee/chuck-workshop).
 
 - [Introduction to Chuck: Syntax and Setup](#intro)
   - What is ChucK?
@@ -21,6 +28,8 @@ This page is available at [http://blog.bonnieeisenman.com/chuck-workshop/](http:
 
 ### What is ChucK?
 ChucK is a musical programming language developed at Princeton. The homepage is here: [http://chuck.cs.princeton.edu](http://chuck.cs.princeton.edu)
+
+The goal of ChucK is sound/music creation and performance. While most programming languages have built-in support for things like numbers and strings, ChucK also focuses on the manipulation of sound and time. It lends itself well to live coding and experimentation. Hopefully you'll find it fun!
 
 Before we begin:
 
@@ -46,7 +55,7 @@ SinOsc osc => dac;
 
 
 
-The first line creates a _sine wave_ and _chucks_ it to the _dac_. Whoa, new terminology!
+The first line creates a _sine wave_ and _chucks_ it to the _dac_. Whoa, that's a lot of new terminology!
 
 - Instead of the assignment operator, `=`, which you might see in other languages, ChucK uses the "chuck" operator, or `=>`.
 - _dac_ is shorthand for your audio output (e.g. speakers or headphones). Similarly, _adc_ refers to your microphone. [Docs here.](http://chuck.cs.princeton.edu/doc/program/ugen_full.html#dac)
@@ -70,10 +79,12 @@ This section is mostly for reference -- skim it, but don't worry about understan
 #### Printing
 
 ```
-<<< "Hi!"" >>>;
+<<< "Hi! This is good for debugging." >>>;
 ```
 
 #### Variables
+
+Basic types that you may find useful include `float`, `int`, and `dur` (duration).
 
 ```
 42 => int answer;
@@ -86,6 +97,8 @@ This section is mostly for reference -- skim it, but don't worry about understan
 #### Arrays
 
 [Docs.](http://chuck.cs.princeton.edu/doc/language/array.html)
+
+Arrays are useful for storing things like note values, rhythms, and so on.
 
 ```
 int foo[10];
@@ -108,7 +121,7 @@ for (0 => int i; i < 10; i++)
 ```
 while (true)
 {
-  <<< "This can be useful for looping audio." >>>;
+  <<< "This can be useful for looping audio indefinitely." >>>;
   1::second => now; // Wait 1 second
 }
 ```
@@ -127,7 +140,7 @@ hey("everyboy");
 
 ChucK has classes. [Here are the docs](http://chuck.cs.princeton.edu/doc/language/class.html). Once you start working with more complicated synthesis, you'll likely find classes useful.
 
-Example:
+Example (don't worry too much about the code for now):
 
 ```
 // classExample.ck
@@ -160,11 +173,6 @@ n.quarter(55);
   Your browser does not support the audio tag.
 </audio>
 
-
-
-#### Concurrency
-
-Concurrency in ChucK works via _sporking_. We'll cover this later.
 
 #### Helpful functions
 
@@ -241,7 +249,7 @@ for (200 => int i; i >= 0; i--)
 </audio>
 
 > ## Exercise: Volume and Rhythm
-> What kind of rhythms can you generate just by varing volume?
+> What kind of rhythms can you generate just by varing volume? Check out `rhythm.ck` for an example, and try creating your own variations.
 
 ## Pitch and Frequency
 
@@ -250,14 +258,73 @@ The perceived __pitch__ is determined by the frequency of the wave. __Pitch__ is
 Extening `hello.ck` to make two differently-pitched beeps is easy:
 
 ```
-// TODO
+// hello2.ck
+SinOsc osc => Gain g => dac;
+
+.5 => g.gain;
+440 => osc.freq;
+500::ms => now;
+
+220 => osc.freq;
+.25 => g.gain;
+1000::ms => now;
 ```
 
-We can also use `Std.mtof` to set frequency using MIDI values, which are usually easier to understand intuitively than raw Herz values. MIDI values map to notes, so for instance, a middle C has a MIDI value of //TODO.
+
+<audio controls>
+  <source src="assets/sound/hello2.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio>
+
+We hear pitches within a certain frequency range as tones, but as the frequency drops, we'll hear a "beat" instead. Try listening to this with your headphones on.
+
 
 ```
-// TODO
+// beat.ck
+SinOsc osc => dac;
+40 => osc.freq;
+2::second => now;
 ```
+
+<audio controls>
+  <source src="assets/sound/beat.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio>
+
+You can actually hear where this threshold happens, too:
+
+```
+// pitchdrop.ck
+SinOsc osc => Envelope e => dac;
+for (180 => int i; i > 40; i--)
+{
+  osc.freq(i);
+  e.keyOn();
+  200::ms => now;
+  e.keyOff();
+  100::ms => now;
+}
+2::second => now;
+```
+
+// TODO
+
+We can also use `Std.mtof` to set frequency using MIDI values, which are usually easier to understand intuitively than raw Herz values. MIDI values map to notes, so for instance, a middle C has a MIDI value of 60.
+
+```
+// mtof.ck
+SinOsc osc => dac;
+for (40 => int i; i < 80; i++)
+{
+  osc.freq(Std.mtof(i));
+  500::ms => now;
+}
+```
+
+<audio controls>
+  <source src="assets/sound/mtof.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio>
 
 
 ## Types of waves
@@ -348,55 +415,10 @@ With an envelope, we get a smooth transition between "off" and "on".
 ## ADSR and Characteristic Sounds
 
 
-```
-# hello2.ck
-SinOsc osc => Gain g => dac;
 
-.5 => g.gain;
-440 => osc.freq;
-500::ms => now;
 
-220 => osc.freq;
-.25 => g.gain;
-1000::ms => now;
-```
 
-<audio controls>
-  <source src="assets/sound/hello2.m4a" type="audio/mp4">
-  Your browser does not support the audio tag.
-</audio>
-
-New things of note:
-
-- ChucK syntax is a little backwards when it comes to assignment, compared with other programming languages. It's `440 => osc.freq`, not `osc.freq = 440`.
-- You can chain `=>` operators together! This syntax is inspired by the physical legacy of electronic music, when you might be literally chaining together multiple objects using wires.
-- A `Gain` is a unit generator that controls volume. Docs: [http://chuck.cs.princeton.edu/doc/program/ugen_full.html#gain](http://chuck.cs.princeton.edu/doc/program/ugen_full.html#gain)
-- We're now using milliseconds, or `ms`, instead of seconds. You can also use `minute`, `hour`, `day`, or even `week`. 
 
 Changing the frequency of a wave can dramatically impact how we perceive it. If you lower the pitch, you will hear a __beat__ instead of a __tone__. You may need headphones or good-quality speakers, not normal laptop speakers, to hear this.
 
 
-```
-# beat.ck
-SinOsc osc => dac;
-40 => osc.freq;
-2::second => now;
-```
-
-<audio controls>
-  <source src="assets/sound/beat.m4a" type="audio/mp4">
-  Your browser does not support the audio tag.
-</audio>
-
-What's the difference between 
-
-## planning
-
-- demonstrate beats
-- demonstrate changing the volume
-- do a beat
-- overlay a melody to demonstrate sporking
-
-
-
- 
