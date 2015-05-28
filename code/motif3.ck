@@ -7,7 +7,7 @@ osc.gain(1);
 
 500 => int Q;
 
-fun void note(int f, dur d)
+fun void play(int f, dur d)
 {
   Std.mtof(f) => osc.freq;
   Std.mtof(f) / 2 => to.freq;
@@ -24,5 +24,5 @@ fun void note(int f, dur d)
 
 for (0 => int i; i < notes.cap(); i++)
 {
-  note(notes[i][0], notes[i][1]::ms);
+  play(notes[i][0], notes[i][1]::ms);
 }

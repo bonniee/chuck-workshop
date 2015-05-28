@@ -276,6 +276,68 @@ SinOsc osc => Gain g => dac;
   Your browser does not support the audio tag.
 </audio>
 
+
+We can also use `Std.mtof` to set frequency using MIDI values, which are usually easier to understand intuitively than raw Herz values. MIDI values map to notes, so for instance, a middle C has a MIDI value of 60.
+
+```
+// mtof.ck
+SinOsc osc => dac;
+for (40 => int i; i < 80; i++)
+{
+  osc.freq(Std.mtof(i));
+  500::ms => now;
+}
+```
+
+<audio controls>
+  <source src="assets/sound/mtof.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio>
+
+Frequency doesn't have to be fixed! Rapidly scaling the frequency can produce neat effects:
+
+```
+// slide.ck
+SinOsc osc => dac;
+
+fun void slide(int start, int end, int len)
+{
+  start - end => int gap;
+  gap / 200.0 => float step;
+  len / 200.0 => float wait;
+
+  osc.gain(1);
+  osc.freq(start);
+  for (0 => int i; i < 200; i++)
+  {
+    osc.freq(osc.freq() - step);
+    wait::ms => now;
+  }
+  osc.gain(0);
+}
+
+while (true)
+{
+  slide(200, 50, 150);
+  slide(200, 50, 500);
+  slide(50, 200, 500);
+  slide(100, 300, 500);
+  slide(300, 50, 150);
+}
+```
+
+// TODO
+
+> ## Exercise: Manipulating Frequency
+> What kinds of sound effects can you create solely by manipulating frequency? Note the difference between the "slide up" and "slide down" sounds in `slide.ck`.
+
+> ## Exercise: Playing a Basic Melody
+> Now that you know how to control both pitch and volume, try playing a basic melody. Mary Had a Little Lamb, perhaps?
+
+
+### Below the Threshold: Beats
+
+
 We hear pitches within a certain frequency range as tones, but as the frequency drops, we'll hear a "beat" instead. Try listening to this with your headphones on.
 
 
@@ -309,27 +371,16 @@ for (180 => int i; i > 40; i--)
 
 // TODO
 
-We can also use `Std.mtof` to set frequency using MIDI values, which are usually easier to understand intuitively than raw Herz values. MIDI values map to notes, so for instance, a middle C has a MIDI value of 60.
 
-```
-// mtof.ck
-SinOsc osc => dac;
-for (40 => int i; i < 80; i++)
-{
-  osc.freq(Std.mtof(i));
-  500::ms => now;
-}
-```
+> ## Excercise: Beat It
+> Try adjusting the frequency you used in your earlier rhythm sketch. What does it sound like?
 
-<audio controls>
-  <source src="assets/sound/mtof.m4a" type="audio/mp4">
-  Your browser does not support the audio tag.
-</audio>
+
 
 
 ## Types of waves
 
-Remember I talked about sine, square, triangle, and saw waves? Yeah.
+Sine, square, triangle, and square waves form the basis of simple sound generation. We've been using mostly sine waves in the examples thus far. Try swapping out sine waves for other kinds and experiment to determine how it changes the perceived sound.
 
 ## Programming time!
 
@@ -346,10 +397,18 @@ It might be useful to use the following constructs:
 
 ### Arrays of pitch and duration
 
-You can see an example of this here:
+Organizing your composition using arrays can be helpful. You can see an example of this here:
 
 ```
-// TODO
+// Excerpt from motif3.ck
+[ [55,Q/2], [55,Q/2], [55,Q/2], [52,Q*2],
+  [0,Q/2], [53,Q/2], [53, Q/2], [53,Q/2],
+  [50,Q*2] ] @=> int notes[][];
+
+for (0 => int i; i < notes.cap(); i++)
+{
+  play(notes[i][0], notes[i][1]::ms);
+}
 ```
 
 ### Classes
@@ -410,7 +469,6 @@ With an envelope, we get a smooth transition between "off" and "on".
 // TODO
 ```
 
-## The Noise Ugen
 
 ## ADSR and Characteristic Sounds
 
