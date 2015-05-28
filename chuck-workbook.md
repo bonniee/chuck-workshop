@@ -49,8 +49,8 @@ SinOsc osc => dac;
 The first line creates a _sine wave_ and _chucks_ it to the _dac_. Whoa, new terminology!
 
 - Instead of the assignment operator, `=`, which you might see in other languages, ChucK uses the "chuck" operator, or `=>`.
-- _dac_ is shorthand for your audio output (e.g. speakers or headphones). Similarly, _adc_ refers to your microphone. Docs: [http://chuck.cs.princeton.edu/doc/program/ugen_full.html#dac](http://chuck.cs.princeton.edu/doc/program/ugen_full.html#dac)
-- A SinOsc is a _unit generator_ that produces sine waves. Docs: [http://chuck.cs.princeton.edu/doc/program/ugen_full.html#sinosc](http://chuck.cs.princeton.edu/doc/program/ugen_full.html#sinosc)
+- _dac_ is shorthand for your audio output (e.g. speakers or headphones). Similarly, _adc_ refers to your microphone. [Docs here.](http://chuck.cs.princeton.edu/doc/program/ugen_full.html#dac)
+- A SinOsc is a _unit generator_ that produces sine waves. In ChucK, Unit Generators produce a steady stream of _samples_; basically, they're things that make noise. [SinOsc docs here.](http://chuck.cs.princeton.edu/doc/program/ugen_full.html#sinosc)
 
 A sine wave looks like this:
 
@@ -58,14 +58,14 @@ A sine wave looks like this:
 
 We perceive a sine wave as a tone, so sending a sine wave to the dac creates an audible noise.
 
-The first line alone won't do anything, however, because the program will immediately terminate. The second line causes the program to wait for one second. `1::second` creates a _duration_ object; chucking it into _now_ causes the program to wait.
+The first line alone won't create any sound, however, because the program will immediately terminate. The second line causes the program to wait for one second. `1::second` creates a _duration_ object; chucking it into _now_ causes the program to wait.
 
 
 ### Basic programming constructs
 
-ChucK is a musical programming language. It also includes most of the "normal" programming language constructs.
+ChucK is a musical programming language, but it also includes most of the "normal" programming language constructs.
 
-This is mostly for reference.
+This section is mostly for reference -- skim it, but don't worry about understanding everything!
 
 #### Printing
 
@@ -125,7 +125,7 @@ hey("everyboy");
 
 #### Classes
 
-Yeah, ChucK has classes. [Here are the docs](http://chuck.cs.princeton.edu/doc/language/class.html).
+ChucK has classes. [Here are the docs](http://chuck.cs.princeton.edu/doc/language/class.html). Once you start working with more complicated synthesis, you'll likely find classes useful.
 
 Example:
 
@@ -174,7 +174,7 @@ The `Std` [library](chuck.cs.princeton.edu/doc/program/stdlib.html) contains som
 - `Math.random2(int min, int max)` is good for adding some variation to your pieces.
 
 
-## Volume
+## Manipulating Volume
 
 The perceived __volume__ of a sound is determined by the __amplitude__ of the wave.
 
@@ -187,6 +187,12 @@ s.gain(1); // Full volume
 s.gain(0.5); // Half volume
 1::second => now;
 ```
+
+<audio controls>
+  <source src="assets/sound/volume.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio>
+
 
 We can also change gain more rapidly:
 
@@ -209,6 +215,30 @@ for (0=> int i; i < 100; i++)
   Your browser does not support the audio tag.
 </audio>
 
+We can also use the `Gain` UGen to manipulate volume more easily. When two UGens are chucked into the same output, we add their effects. Using a Gain can let us manipulate their volume jointly.
+
+```
+// gain.ck	
+SinOsc s1 => Gain g => dac;
+SinOsc s2 => g;
+s1.freq(Std.mtof(70));
+s1.gain(0.8);
+s2.freq(Std.mtof(72));
+s2.gain(0.1);
+
+g.gain(1);
+for (200 => int i; i >= 0; i--)
+{
+  g.gain(i / 100.0);
+  10::ms => now;
+}
+```
+
+
+<audio controls>
+  <source src="assets/sound/gain.m4a" type="audio/mp4">
+  Your browser does not support the audio tag.
+</audio>
 
 ## Pitch and Frequency
 
