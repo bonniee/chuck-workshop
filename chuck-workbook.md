@@ -1,7 +1,12 @@
 #Student Workbook: Introduction to Musical Programming using ChucK
 ## Joy of Coding Workshop by Bonnie Eisenman
 
-This page is available at [http://blog.bonnieeisenman.com/chuck-workshop/](http://blog.bonnieeisenman.com/chuck-workshop/). The github repo, which includes code samples, is [bonniee/chuck-workshop](https://github.com/bonniee/chuck-workshop).
+This page is available at [http://blog.bonnieeisenman.com/chuck-workshop/](http://blog.bonnieeisenman.com/chuck-workshop/).
+
+The github repo, which includes code samples, is [bonniee/chuck-workshop](https://github.com/bonniee/chuck-workshop).
+
+[Slides are here.](https://docs.google.com/presentation/d/1BgE_DRwcxRHDGtcQNELAzsQD3-32g9Y_7rEBC3YXQVA/edit?usp=sharing)
+
 
 ## How to Use
 
